@@ -22,8 +22,9 @@ app.get("/", (req, res) => {
 app.post("/send-email", async (req, res) => {
   const { name, email, message, phone } = req.body;
   if (!name || !email || !message || !phone) {
-    return res.status(400).send("All fields require");
+    return res.status(400).send("All fields are required");
   }
+  res.status(200).send("Email sent successfully!");
   try {
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
@@ -31,10 +32,8 @@ app.post("/send-email", async (req, res) => {
       subject: `Message from ${name}`,
       text: `Name: ${name}\nSender Email: ${email}\nNumber: ${phone}\nMessage: ${message}`,
     });
-    res.status(200).send("Email sent successfully!");
   } catch (err) {
     console.log(err);
-    res.status(500).send("Failed to send email");
   }
 });
 
